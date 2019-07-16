@@ -1,0 +1,8 @@
+l=['разработка','сокет','декоратор']
+for x in l:
+    print(x,type(x),len(x),x.encode(),type(x.encode()),len(x.encode()))
+
+
+# разработка <class 'str'> 10 b'\xd1\x80\xd0\xb0\xd0\xb7\xd1\x80\xd0\xb0\xd0\xb1\xd0\xbe\xd1\x82\xd0\xba\xd0\xb0' <class 'bytes'> 20
+# сокет <class 'str'> 5 b'\xd1\x81\xd0\xbe\xd0\xba\xd0\xb5\xd1\x82' <class 'bytes'> 10
+# декоратор <class 'str'> 9 b'\xd0\xb4\xd0\xb5\xd0\xba\xd0\xbe\xd1\x80\xd0\xb0\xd1\x82\xd0\xbe\xd1\x80' <class 'bytes'> 18
