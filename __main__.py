@@ -63,19 +63,20 @@ try:
 
         if len(connections) > 0:
             rlist, wlist, xlist = select.select(connections, connections, connections, 0)
+            for read_client in rlist:
+                bytes_request = read_client.recv(config.get('buffersize'))
+                requests.append(bytes_request)
+                # print(f'Client send message {bytes_request.decode()}')
+            if requests:
+                bytes_request = requests.pop()
+                bytes_response = handle_default_request(bytes_request)
+                for write_client in wlist:
+                    write_client.send(bytes_response)
             # print(rlist, wlist, xlist)
         else:
-            rlist, wlist, xlist = [], [], []
+            pass
 
-        for read_client in rlist:
-            bytes_request = read_client.recv(config.get('buffersize'))
-            requests.append(bytes_request)
-            # print(f'Client send message {bytes_request.decode()}')
-        if requests:
-            bytes_request = requests.pop()
-            bytes_response = handle_default_request(bytes_request)
-            for write_client in wlist:
-                write_client.send(bytes_response)
+
 
 except KeyboardInterrupt:
     logging.info('Server shutdown.')
