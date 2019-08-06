@@ -55,8 +55,6 @@ try:
     while True:
         try:
             client, address = sock.accept()
-            client.setblocking(False)
-            client.settimeout(0)
             logging.info(f'Client was detected { address[0] }:{ address[1] }')
             connections.append(client)
             print(connections)
