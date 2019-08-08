@@ -61,18 +61,31 @@ try:
         except:
             pass
 
-        if len(connections) > 0:
+        if connections:
             rlist, wlist, xlist = select.select(connections, connections, connections, 0)
+
             for read_client in rlist:
-                bytes_request = read_client.recv(config.get('buffersize'))
-                requests.append(bytes_request)
-                # print(f'Client send message {bytes_request.decode()}')
+                try:
+                    bytes_request = read_client.recv(config.get('buffersize'))
+                    requests.append(bytes_request)
+                except:
+                    client2kill = str(read_client)
+                    read_client.close()
+                    connections.remove(read_client)
+                    print(f'Client with {client2kill} offline')
+
             if requests:
                 bytes_request = requests.pop()
                 bytes_response = handle_default_request(bytes_request)
                 for write_client in wlist:
-                    write_client.send(bytes_response)
-            # print(rlist, wlist, xlist)
+                    try:
+                        write_client.send(bytes_response)
+                    except:
+                        client2kill = str(write_client)
+                        write_client.close()
+                        connections.remove(write_client)
+                        print(f'Client {client2kill} offline')
+
         else:
             pass
 
